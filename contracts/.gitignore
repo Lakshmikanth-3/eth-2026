@@ -1,0 +1,23 @@
+# Foundry
+cache/
+out/
+broadcast/
+
+# Dotenv file
+.env
+
+# Node modules (if using npm/yarn)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.sol.artifacts
