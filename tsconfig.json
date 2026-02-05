@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2017",
+        "target": "ES2020",
         "lib": [
             "dom",
             "dom.iterable",
@@ -39,6 +39,7 @@
         ".next/types/**/*.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "contracts"
     ]
 }

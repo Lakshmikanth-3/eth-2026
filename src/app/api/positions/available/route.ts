@@ -9,8 +9,8 @@ const mockPositions: Position[] = [
         token0: 'USDC',
         token1: 'ETH',
         liquidity: 1000000,        // ✅ Fixed: number instead of string
-        pricePerSecond: 0.058,     // ✅ Fixed: number instead of string
-        pricePerHour: 208.80,      // ✅ Fixed: number instead of string
+        pricePerSecond: 0.00001,      // ~0.036 ETH per hour (testnet-friendly)
+        pricePerHour: 0.036,
         chain: 'arbitrum',
         available: true,
         apr: 24.5,                 // ✅ Fixed: number instead of string
@@ -21,8 +21,8 @@ const mockPositions: Position[] = [
         token0: 'USDC',
         token1: 'USDT',
         liquidity: 500000,
-        pricePerSecond: 0.029,
-        pricePerHour: 104.40,
+        pricePerSecond: 0.000005,     // ~0.018 ETH per hour
+        pricePerHour: 0.018,
         chain: 'base',
         available: true,
         apr: 18.2,
@@ -33,8 +33,8 @@ const mockPositions: Position[] = [
         token0: 'ETH',
         token1: 'DAI',
         liquidity: 2000000,
-        pricePerSecond: 0.116,
-        pricePerHour: 417.60,
+        pricePerSecond: 0.00002,      // ~0.072 ETH per hour
+        pricePerHour: 0.072,
         chain: 'optimism',
         available: true,
         apr: 21.8,
@@ -45,20 +45,20 @@ const mockPositions: Position[] = [
         token0: 'WBTC',
         token1: 'ETH',
         liquidity: 750000,
-        pricePerSecond: 0.044,
-        pricePerHour: 158.40,
+        pricePerSecond: 0.000008,     // ~0.029 ETH per hour
+        pricePerHour: 0.029,
         chain: 'arbitrum',
         available: true,
         apr: 19.5,
     },
     {
         id: '5',
-        poolName: 'USDC/DAI',
-        token0: 'USDC',
-        token1: 'DAI',
-        liquidity: 1500000,
-        pricePerSecond: 0.087,
-        pricePerHour: 313.20,
+        poolName: 'LINK/ETH',
+        token0: 'LINK',
+        token1: 'ETH',
+        liquidity: 300000,
+        pricePerSecond: 0.000003,     // ~0.011 ETH per hour
+        pricePerHour: 0.011,
         chain: 'base',
         available: false,
         apr: 22.1,

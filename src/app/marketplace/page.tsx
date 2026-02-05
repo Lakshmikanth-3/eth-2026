@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getAddress } from 'viem'
+import { useAccount } from 'wagmi'
 import { Position } from '@/types'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -8,6 +10,7 @@ import FilterPanel, { FilterState } from '@/components/features/FilterPanel'
 import PositionCard from '@/components/features/PositionCard'
 import RentModal from '@/components/features/RentModal'
 import { usePositions } from '@/hooks/usePositions'
+import { useRentPosition } from '@/hooks/useRentPosition'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import toast from 'react-hot-toast'
 
@@ -20,8 +23,16 @@ export default function MarketplacePage() {
     })
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(null)
     const [isRentModalOpen, setIsRentModalOpen] = useState(false)
+    const { rent, isPending, isConfirming, isConfirmed, error: rentError } = useRentPosition()
+    const { address } = useAccount()
 
-    const { data: positions, isLoading, error } = usePositions(filters.chain)
+    const { data: positions, isLoading, error: positionsError } = usePositions(filters.chain)
+
+    // Close modal on successful confirmation
+    if (isConfirmed && isRentModalOpen) {
+        setIsRentModalOpen(false)
+        setSelectedPosition(null)
+    }
 
     // Filter and sort positions
     const filteredPositions = positions?.filter((position) => {
@@ -62,10 +73,45 @@ export default function MarketplacePage() {
     }
 
     const handleConfirmRental = (positionId: string, duration: number) => {
-        toast.success(`Successfully rented position for ${duration / 3600} hours!`)
-        setIsRentModalOpen(false)
-        setSelectedPosition(null)
+        if (!selectedPosition) return
+
+        // Use connected wallet address as owner (properly checksummed and semantically correct)
+        // Fallback to address(1) for demo purposes if not connected
+        const owner = address || getAddress('0x0000000000000000000000000000000000000001')
+
+        rent(
+            positionId,
+            owner,
+            duration,
+            selectedPosition.pricePerSecond || (selectedPosition.pricePerHour / 3600), // Handle unit conversion if needed
+            selectedPosition.chain
+        )
     }
+
+    // Handle transaction states with toast feedback
+    useEffect(() => {
+        if (isPending) {
+            toast.loading('Confirm transaction in your wallet...', { id: 'rental-tx' })
+        }
+
+        if (isConfirming) {
+            toast.loading('Transaction confirming...', { id: 'rental-tx' })
+        }
+
+        if (isConfirmed) {
+            toast.success('Rental successful!', { id: 'rental-tx' })
+            setIsRentModalOpen(false)
+            setSelectedPosition(null)
+        }
+    }, [isPending, isConfirming, isConfirmed])
+
+    // Handle errors
+    useEffect(() => {
+        if (rentError) {
+            toast.error(`Transaction failed: ${rentError.message}`, { id: 'rental-tx' })
+        }
+    }, [rentError])
+
 
     return (
         <>
@@ -97,12 +143,14 @@ export default function MarketplacePage() {
                                 </div>
                             )}
 
-                            {error && (
+
+                            {positionsError && (
                                 <div className="text-center py-20">
                                     <p className="text-error mb-4">Failed to load positions</p>
                                     <p className="text-text-secondary">Please try again later</p>
                                 </div>
                             )}
+
 
                             {filteredPositions && filteredPositions.length === 0 && (
                                 <div className="text-center py-20">
@@ -140,6 +188,7 @@ export default function MarketplacePage() {
             <RentModal
                 position={selectedPosition}
                 isOpen={isRentModalOpen}
+                isProcessing={isPending || isConfirming}
                 onClose={() => setIsRentModalOpen(false)}
                 onConfirm={handleConfirmRental}
             />

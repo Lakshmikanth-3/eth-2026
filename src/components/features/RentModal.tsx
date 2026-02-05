@@ -13,13 +13,13 @@ import { Clock, CurrencyDollar, ShieldCheck } from '@phosphor-icons/react'
 interface RentModalProps {
     position: Position | null
     isOpen: boolean
+    isProcessing?: boolean
     onClose: () => void
     onConfirm: (positionId: string, duration: number) => void
 }
 
-export default function RentModal({ position, isOpen, onClose, onConfirm }: RentModalProps) {
+export default function RentModal({ position, isOpen, isProcessing = false, onClose, onConfirm }: RentModalProps) {
     const [duration, setDuration] = useState('24') // hours
-    const [isLoading, setIsLoading] = useState(false)
 
     if (!position) return null
 
@@ -28,13 +28,8 @@ export default function RentModal({ position, isOpen, onClose, onConfirm }: Rent
     const collateral = calculateCollateral(rentalCost)
     const totalRequired = rentalCost + collateral
 
-    const handleConfirm = async () => {
-        setIsLoading(true)
-        // Simulate transaction
-        await new Promise(resolve => setTimeout(resolve, 2000))
+    const handleConfirm = () => {
         onConfirm(position.id, durationSeconds)
-        setIsLoading(false)
-        onClose()
     }
 
     return (
@@ -107,17 +102,17 @@ export default function RentModal({ position, isOpen, onClose, onConfirm }: Rent
                     variant="secondary"
                     onClick={onClose}
                     className="flex-1"
-                    disabled={isLoading}
+                    disabled={isProcessing}
                 >
                     Cancel
                 </Button>
                 <Button
                     onClick={handleConfirm}
                     className="flex-1"
-                    isLoading={isLoading}
-                    disabled={!duration || parseInt(duration) < 1}
+                    isLoading={isProcessing}
+                    disabled={!duration || parseInt(duration) < 1 || isProcessing}
                 >
-                    {isLoading ? 'Processing...' : 'Confirm Rental'}
+                    {isProcessing ? 'Processing...' : 'Confirm Rental'}
                 </Button>
             </div>
 

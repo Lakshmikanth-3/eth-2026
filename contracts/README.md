@@ -1,177 +1,61 @@
-# Flash LP Smart Contracts
+# Flash LP Smart Contracts - Hardhat Setup Guide
 
-Production-ready Solidity contracts for Flash LP - a decentralized marketplace for renting Uniswap v4 LP positions with Yellow Network state channels.
+**Easy-to-use Hardhat setup** for Flash LP smart contracts - much simpler than Foundry!
 
-## 📋 Contracts Overview
+## ✅ Why Hardhat?
 
-### Core Contracts
+- **JavaScript/TypeScript Based** - No new language to learn
+- **Better Error Messages** - Clear, helpful debugging
+- **Rich Plugin Ecosystem** - Everything you need built-in
+- **Excellent Documentation** - Easy to get started
+- **TypeScript Support** - Full type safety
 
-| Contract | Purpose | Lines | Status |
-|----------|---------|-------|--------|
-| **RentalVault.sol** | NFT custody & position management | 300+ | ✅ Complete |
-| **RentalManager.sol** | Rental lifecycle & fee distribution | 400+ | ✅ Complete |
-| **YellowChannelManager.sol** | State channel management | 350+ | ✅ Complete |
+---
 
-### Architecture
+## 🚀 Quick Start (5 minutes)
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                     Frontend (Next.js)                  │
-└────────────────┬────────────────────────────────────────┘
-                 │
-    ┌────────────▼────────────┐
-    │   walletConnect/wagmi   │
-    └────────────┬────────────┘
-                 │
-┌────────────────▼────────────────────────────────────────┐
-│                   Smart Contracts                        │
-├──────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
-│  │ RentalVault  │  │RentalManager │  │YellowChannel │   │
-│  │              │  │              │  │   Manager    │   │
-│  │  - Deposit   │  │ - Create     │  │ - Open       │   │
-│  │  - List      │  │ - End        │  │ - Update     │   │
-│  │  - Withdraw  │  │ - Extend     │  │ - Close      │   │
-│  │  - Lock      │  │ - Emergency  │  │ - Dispute    │   │
-│  └──────────────┘  └──────────────┘  └──────────────┘   │
-└──────────────────────────────────────────────────────────┘
-                 │
-    ┌────────────▼────────────┐
-    │  Uniswap v4 Position NFT │
-    └─────────────────────────┘
-```
-
-## 🚀 Quick Start
-
-### 1. Install Foundry
-
-```powershell
-# Windows PowerShell
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-```
-
-Verify installation:
-```bash
-forge --version
-cast --version
-anvil --version
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
-cd contracts
-forge install OpenZeppelin/openzeppelin-contracts@v5.0.0
-forge install foundry-rs/forge-std
+npm install
 ```
 
-### 3. Build Contracts
+This installs:
+- `hardhat` - Core framework
+- `@nomicfoundation/hardhat-toolbox` - Testing, deployment, verification
+- `@openzeppelin/contracts` - Secure contract library
+- `dotenv` - Environment variables
+
+### 2. Compile Contracts
 
 ```bash
-forge build
+npx hardhat compile
 ```
 
 Expected output:
 ```
-[⠊] Compiling...
-[⠒] Compiling 15 files with 0.8.24
-[⠢] Solc 0.8.24 finished in 3.42s
-Compiler run successful!
+Compiled 3 Solidity files successfully
 ```
 
-### 4. Run Tests
+### 3. Run Tests
 
 ```bash
-forge test
-forge test -vvv  # Verbose
-forge coverage   # Coverage report
+npx hardhat test
 ```
 
-## 📦 Contract Details
-
-### RentalVault.sol
-
-**Purpose**: Secure custody of LP position NFTs
-
-**Key Functions**:
-- `depositPosition(address nftContract, uint256 tokenId)` - Deposit NFT
-- `listPosition(bytes32 positionId, ...)` - List for rent
-- `withdrawPosition(bytes32 positionId)` - Withdraw NFT
-- `lockPosition(bytes32 positionId)` - Lock during rental (owner only)
-
-**Security Features**:
-- ReentrancyGuard on all state-changing functions
-- Ownable for admin functions
-- Pausable for emergencies
-- Safe ERC721 transfers
-
-### RentalManager.sol
-
-**Purpose**: Manages rental lifecycle and payments
-
-**Key Functions**:
-- `createRental(...)` - Start new rental with collateral
-- `endRental(bytes32 rentalId)` - Settle and distribute fees
-- `extendRental(bytes32 rentalId, uint256 duration)` - Extend active rental
-- `emergencyClose(bytes32 rentalId)` - Owner can close with penalty
-
-**Fee Distribution**:
-- Platform fee: 2% (configurable, max 5%)
-- Owner fee: 98%
-- Renter collateral: 120% of rental cost (configurable)
-
-**Duration Limits**:
-- Minimum: 1 hour
-- Maximum: 7 days
-
-### YellowChannelManager.sol
-
-**Purpose**: Off-chain state channel management
-
-**Key Functions**:
-- `openChannel(address participant2, uint256 duration)` - Open channel
-- `updateChannel(...)` - Update balances off-chain
-- `closeChannel(...)` - Close with signatures
-- `startDispute(bytes32 channelId)` - Initiate dispute
-- `resolveDispute(...)` - Admin dispute resolution
-
-**Security Features**:
-- ECDSA signature verification
-- Nonce-based replay protection
-- 24-hour dispute timeout
-- Balance validation
-
-## 🧪 Testing
-
-### Run All Tests
+### 4. Deploy Locally (Test)
 
 ```bash
-forge test
+# Start local blockchain
+npx hardhat node
+
+# In another terminal
+npx hardhat run contracts/scripts/deploy.ts --network localhost
 ```
 
-### Run Specific Test
+---
 
-```bash
-forge test --match-test testDepositPosition
-```
-
-### Gas Report
-
-```bash
-forge test --gas-report
-```
-
-### Coverage
-
-```bash
-forge coverage
-forge coverage --report lcov
-```
-
-## 🌐 Deployment
-
-### Environment Setup
+## 📝 Environment Setup
 
 Create `.env` in project root:
 
@@ -185,77 +69,124 @@ BASE_SEPOLIA_RPC=https://sepolia.base.org
 OPTIMISM_SEPOLIA_RPC=https://sepolia.optimism.io
 
 # Etherscan API keys (for verification)
-ARBISCAN_API_KEY=your_arbitrum_etherscan_key
-BASESCAN_API_KEY=your_base_etherscan_key
-OPTIMISM_API_KEY=your_optimism_etherscan_key
+ARBISCAN_API_KEY=your_key
+BASESCAN_API_KEY=your_key
+OPTIMISM_API_KEY=your_key
+
+# Optional
+REPORT_GAS=true
 ```
 
-### Deploy to Testnet
+**⚠️ NEVER commit `.env` to git!**
+
+---
+
+## 🌐 Deploy to Testnet
+
+### Get Testnet ETH
+
+1. **Arbitrum Sepolia**: https://faucet.quicknode.com/arbitrum/sepolia
+2. **Base Sepolia**: https://faucet.quicknode.com/base/sepolia  
+3. **Optimism Sepolia**: https://faucet.quicknode.com/optimism/sepolia
+
+### Deploy Commands
 
 #### Arbitrum Sepolia
-
 ```bash
-source .env
-forge script script/Deploy.s.sol:DeployAll \
-  --rpc-url $ARBITRUM_SEPOLIA_RPC \
-  --broadcast \
-  --verify
+npx hardhat run contracts/scripts/deploy.ts --network arbitrumSepolia
 ```
 
 #### Base Sepolia
-
 ```bash
-forge script script/Deploy.s.sol:DeployAll \
-  --rpc-url $BASE_SEPOLIA_RPC \
-  --broadcast \
-  --verify
+npx hardhat run contracts/scripts/deploy.ts --network baseSepolia
 ```
 
 #### Optimism Sepolia
-
 ```bash
-forge script script/Deploy.s.sol:DeployAll \
-  --rpc-url $OPTIMISM_SEPOLIA_RPC \
-  --broadcast \
-  --verify
+npx hardhat run contracts/scripts/deploy.ts --network optimismSepolia
 ```
 
-### Verify Contracts Manually
+### Verify Contracts
 
-If auto-verification fails:
-
-```bash
-forge verify-contract \
-  --chain-id 421614 \
-  --num-of-optimizations 1000000 \
-  --compiler-version v0.8.24 \
-  <CONTRACT_ADDRESS> \
-  src/RentalVault.sol:RentalVault \
-  --etherscan-api-key $ARBISCAN_API_KEY
-```
-
-## 📁 Export ABIs for Frontend
-
-After building, ABIs are in `out/`:
+After deployment:
 
 ```bash
-# Copy ABIs to frontend
-cp out/RentalVault.sol/RentalVault.json ../src/lib/abis/
-cp out/RentalManager.sol/RentalManager.json ../src/lib/abis/
-cp out/YellowChannelManager.sol/YellowChannelManager.json ../src/lib/abis/
+npx hardhat verify --network arbitrumSepolia <CONTRACT_ADDRESS>
 ```
 
-Create `src/lib/contracts.ts`:
+---
+
+## 🧪 Testing
+
+### Run All Tests
+```bash
+npx hardhat test
+```
+
+### Run Specific Test
+```bash
+npx hardhat test contracts/test/RentalVault.test.ts
+```
+
+### With Gas Report
+```bash
+REPORT_GAS=true npx hardhat test
+```
+
+### Coverage
+```bash
+npx hardhat coverage
+```
+
+---
+
+## 📁 Project Structure
+
+```
+flash-lp/
+├── hardhat.config.ts          # Hardhat configuration
+├── contracts/
+│   ├── src/                   # Solidity contracts
+│   │   ├── RentalVault.sol
+│   │   ├── RentalManager.sol
+│   │   └── YellowChannelManager.sol
+│   ├── scripts/               # Deployment scripts
+│   │   └── deploy.ts
+│   └── test/                  # Test files
+│       └── RentalVault.test.ts
+├── .env                       # Environment variables (gitignored)
+└── package.json               # Dependencies
+```
+
+---
+
+## 🔗 Frontend Integration
+
+### 1. Export Contract ABIs
+
+After compiling, ABIs are in `contracts/artifacts/`:
+
+```bash
+# Create ABI directory
+mkdir -p src/lib/abis
+
+# Copy ABIs (PowerShell)
+Copy-Item "contracts/artifacts/src/RentalVault.sol/RentalVault.json" "src/lib/abis/"
+Copy-Item "contracts/artifacts/src/RentalManager.sol/RentalManager.json" "src/lib/abis/"
+Copy-Item "contracts/artifacts/src/YellowChannelManager.sol/YellowChannelManager.json" "src/lib/abis/"
+```
+
+### 2. Update `src/lib/contracts.ts`
 
 ```typescript
 import RentalVaultABI from './abis/RentalVault.json'
 import RentalManagerABI from './abis/RentalManager.json'
 import YellowChannelABI from './abis/YellowChannelManager.json'
 
-// From deployment output
+// Replace with your deployed addresses
 export const CONTRACTS = {
   arbitrumSepolia: {
-    rentalVault: '0x...',
+    rentalVault: '0x...',      // From deployment output
     rentalManager: '0x...',
     yellowChannel: '0x...'
   },
@@ -273,102 +204,142 @@ export const ABIS = {
 }
 ```
 
-## 🔒 Security Considerations
+### 3. Use in Frontend
 
-### Implemented Protections
+```typescript
+import { useWriteContract } from 'wagmi'
+import { CONTRACTS, ABIS } from '@/lib/contracts'
 
-- ✅ **Reentrancy Protection**: ReentrancyGuard on all external payable functions
-- ✅ **Access Control**: Ownable pattern with onlyOwner modifiers
-- ✅ **Input Validation**: All parameters validated before use
-- ✅ **Integer Overflow**: Solidity 0.8+ built-in protection
-- ✅ **Pull Payment Pattern**: Using `.call{value}()` with checks
-- ✅ **Pausable**: Emergency pause mechanism
-- ✅ **Custom Errors**: Gas-efficient error handling
+// Example: Create rental
+const { writeContract } = useWriteContract()
 
-### Recommended Audits
-
-Before mainnet deployment:
-1. Internal security review
-2. External audit (OpenZeppelin, Trail of Bits, etc.)
-3. Bug bounty program
-4. Testnet beta period
-
-## 📊 Gas Optimization
-
-Contracts optimized for:
-- **Optimizer runs**: 1,000,000 (for frequently called functions)
-- **Custom errors** instead of require strings
-- **Packed storage** where possible
-- **Minimal storage reads**
-
-Expected gas costs (estimated):
-- Deposit Position: ~150k gas
-- Create Rental: ~200k gas
-- End Rental: ~100k gas
-- Extend Rental: ~80k gas
-
-## 🐛 Troubleshooting
-
-### Forge not found
-
-```powershell
-# Add to PATH
-$env:PATH += ";C:\Users\<YourUsername>\.foundry\bin"
-# Or restart terminal
+await writeContract({
+  address: CONTRACTS.arbitrumSepolia.rentalManager,
+  abi: ABIS.rentalManager,
+  functionName: 'createRental',
+  args: [positionId, owner, duration, price, channelId],
+  value: collateral
+})
 ```
-
-### Build fails
-
-```bash
-# Clean and rebuild
-forge clean
-rm -rf node_modules lib cache out
-forge install
-forge build
-```
-
-### Test fails
-
-```bash
-# Run with max verbosity
-forge test -vvvv
-
-# Run specific test file
-forge test --match-path test/RentalVault.t.sol
-```
-
-## 📚 Resources
-
-- [Foundry Book](https://book.getfoundry.sh/)
-- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/5.x/)
-- [Solidity Documentation](https://docs.soliditylang.org/)
-- [Uniswap v4 Docs](https://docs.uniswap.org/contracts/v4/overview)
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Write tests for new features
-4. Ensure all tests pass
-5. Submit pull request
-
-## ✅ Production Checklist
-
-Before mainnet:
-- [ ] All tests passing
-- [ ] >95% code coverage
-- [ ] External security audit
-- [ ] Testnet deployment successful
-- [ ] Frontend integration tested
-- [ ] Gas optimization review
-- [ ] Emergency procedures documented
-- [ ] Multi-sig admin setup
-- [ ] Bug bounty program active
 
 ---
 
-**Built for ETH HackMoney 2026** | Flash LP Team
+## 🛠️ Useful Commands
+
+### Compile
+```bash
+npx hardhat compile
+npx hardhat clean  # Clean cache
+```
+
+### Test
+```bash
+npx hardhat test
+npx hardhat test --grep "should deposit"  # Run specific test
+```
+
+### Deploy
+```bash
+npx hardhat run contracts/scripts/deploy.ts --network <network>
+```
+
+### Verify
+```bash
+npx hardhat verify --network <network> <address> [constructor args]
+```
+
+### Local Node
+```bash
+npx hardhat node  # Start local blockchain
+```
+
+### Console
+```bash
+npx hardhat console --network <network>
+```
+
+---
+
+## 📊 Contract Addresses
+
+After deployment, save your addresses here:
+
+### Arbitrum Sepolia
+- RentalVault: `0x...`
+- RentalManager: `0x...`
+- YellowChannelManager: `0x...`
+
+### Base Sepolia
+- RentalVault: `0x...`
+- RentalManager: `0x...`
+- YellowChannelManager: `0x...`
+
+### Optimism Sepolia
+- RentalVault: `0x...`
+- RentalManager: `0x...`
+- YellowChannelManager: `0x...`
+
+---
+
+## 🐛 Troubleshooting
+
+### "Cannot find module 'hardhat'"
+```bash
+npm install
+```
+
+### "Invalid nonce" or "Already known"
+Wait 30 seconds between transactions, or increase gas price.
+
+### Compilation fails
+```bash
+npx hardhat clean
+npx hardhat compile
+```
+
+### Tests fail
+Check that private key in `.env` has testnet ETH.
+
+### Verification fails
+Make sure:
+1. Contract is deployed
+2. API key is correct in `.env`
+3. Network name matches `hardhat.config.ts`
+
+---
+
+## 📚 Resources
+
+- [Hardhat Documentation](https://hardhat.org/docs)
+- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts)
+- [Ethers.js v6](https://docs.ethers.org/v6/)
+- [Wagmi Hooks](https://wagmi.sh/)
+
+---
+
+## ✅ Deployment Checklist
+
+- [ ] Install dependencies (`npm install`)
+- [ ] Create `.env` with private key and RPCs
+- [ ] Compile contracts (`npx hardhat compile`)
+- [ ] Run tests (`npx hardhat test`)
+- [ ] Get testnet ETH from faucets
+- [ ] Deploy to testnet
+- [ ] Verify contracts on Etherscan
+- [ ] Copy ABIs to frontend (`src/lib/abis/`)
+- [ ] Update contract addresses in `src/lib/contracts.ts`
+- [ ] Test frontend integration
+
+---
+
+## 🎉 You're Ready!
+
+Your smart contracts are ready to deploy with Hardhat - much easier than Foundry!
+
+### Next Steps:
+1. Run `npm install`
+2. Create your `.env` file
+3. Run `npx hardhat compile`
+4. Deploy to testnet!
+
+**Happy coding! 🚀**
