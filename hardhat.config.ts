@@ -25,6 +25,7 @@ const config: HardhatUserConfig = {
       url: process.env.ARBITRUM_SEPOLIA_RPC || "",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 421614,
+      gasPrice: 25000000000, // 25 gwei to verify transactions go through
     },
     baseSepolia: {
       url: process.env.BASE_SEPOLIA_RPC || "",

@@ -10,7 +10,8 @@ import FilterPanel, { FilterState } from '@/components/features/FilterPanel'
 import PositionCard from '@/components/features/PositionCard'
 import RentModal from '@/components/features/RentModal'
 import { usePositions } from '@/hooks/usePositions'
-import { useRentPosition } from '@/hooks/useRentPosition'
+import { useFlashLPRent } from '@/hooks/useFlashLPRent'
+import { DEPLOYED_CHAINS } from '@/lib/contracts'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import toast from 'react-hot-toast'
 
@@ -23,7 +24,7 @@ export default function MarketplacePage() {
     })
     const [selectedPosition, setSelectedPosition] = useState<Position | null>(null)
     const [isRentModalOpen, setIsRentModalOpen] = useState(false)
-    const { rent, isPending, isConfirming, isConfirmed, error: rentError } = useRentPosition()
+    const { rent, isPending, isConfirming, isConfirmed, error: rentError } = useFlashLPRent()
     const { address } = useAccount()
 
     const { data: positions, isLoading, error: positionsError } = usePositions(filters.chain)
@@ -36,6 +37,12 @@ export default function MarketplacePage() {
 
     // Filter and sort positions
     const filteredPositions = positions?.filter((position) => {
+        // Chain deployment filter - only show chains where FlashLP is deployed
+        const positionChainId = position.chain === 'arbitrum' ? 421614 : position.chain === 'base' ? 84532 : 0
+        if (!DEPLOYED_CHAINS.includes(positionChainId as typeof DEPLOYED_CHAINS[number])) {
+            return false
+        }
+
         // Search filter
         if (filters.search) {
             const searchLower = filters.search.toLowerCase()
@@ -75,17 +82,16 @@ export default function MarketplacePage() {
     const handleConfirmRental = (positionId: string, duration: number) => {
         if (!selectedPosition) return
 
-        // Use connected wallet address as owner (properly checksummed and semantically correct)
-        // Fallback to address(1) for demo purposes if not connected
-        const owner = address || getAddress('0x0000000000000000000000000000000000000001')
+        // Convert position ID to pool ID (bigint)
+        const poolId = BigInt(positionId)
 
-        rent(
-            positionId,
-            owner,
-            duration,
-            selectedPosition.pricePerSecond || (selectedPosition.pricePerHour / 3600), // Handle unit conversion if needed
-            selectedPosition.chain
-        )
+        //Get chain ID from position
+        const chainId = selectedPosition.chain === 'arbitrum' ? 421614 : 84532
+
+        // Calculate price per second from position data
+        const pricePerSecond = BigInt(Math.floor(selectedPosition.pricePerSecond))
+
+        rent(poolId, duration, pricePerSecond, chainId)
     }
 
     // Handle transaction states with toast feedback
