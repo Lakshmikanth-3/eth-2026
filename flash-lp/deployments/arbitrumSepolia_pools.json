@@ -1,0 +1,38 @@
+{
+  "network": "arbitrumSepolia",
+  "chainId": 421614,
+  "flashLP": "0x69F6115E380A92Fd23eDdf4E89aB6d2d178DC567",
+  "tokens": {
+    "USDC": "0xB3Dc4e18B191571AcbaA2F7FfABe09126bC6B08E",
+    "WETH": "0x17a32617e933CF2E01FcAAc5BCA88CC2ca995643",
+    "USDT": "0x4A02627177043F6F1EBd007087684778cD34B22C",
+    "DAI": "0x49D68DF30431806605ba4c52fDb95d380374006e"
+  },
+  "pools": [
+    {
+      "id": 1,
+      "pair": "USDC/WETH",
+      "token0": "0xB3Dc4e18B191571AcbaA2F7FfABe09126bC6B08E",
+      "token1": "0x17a32617e933CF2E01FcAAc5BCA88CC2ca995643",
+      "amount0": "1000",
+      "amount1": "0.5"
+    },
+    {
+      "id": 2,
+      "pair": "USDT/WETH",
+      "token0": "0x4A02627177043F6F1EBd007087684778cD34B22C",
+      "token1": "0x17a32617e933CF2E01FcAAc5BCA88CC2ca995643",
+      "amount0": "2000",
+      "amount1": "1.0"
+    },
+    {
+      "id": 3,
+      "pair": "DAI/USDC",
+      "token0": "0x49D68DF30431806605ba4c52fDb95d380374006e",
+      "token1": "0xB3Dc4e18B191571AcbaA2F7FfABe09126bC6B08E",
+      "amount0": "1500",
+      "amount1": "1500"
+    }
+  ],
+  "timestamp": "2026-02-06T07:07:56.341Z"
+}

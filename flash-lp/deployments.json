@@ -1,0 +1,36 @@
+{
+  "deployments": [
+    {
+      "yellowChannelManager": "0x0c860a1999d2a47b76da73925bf25e3f3d908f51",
+      "unifiedFlashLP": "0x7dfccbf03c91de1dd93f31e4f94101dd3e269625",
+      "network": "Base Sepolia",
+      "chainId": 84532,
+      "timestamp": "2026-02-07T07:52:21.719Z"
+    },
+    {
+      "yellowChannelManager": "0xd0d53570069e1a9a3c0f6d7a7e6ba12698b677d6",
+      "unifiedFlashLP": "0xa7a3487ba732ebf912bd3d7b376e6d89b57ac0ef",
+      "network": "Arbitrum Sepolia",
+      "chainId": 421614,
+      "timestamp": "2026-02-07T07:52:42.965Z"
+    }
+  ],
+  "baseSepolia": {
+    "UnifiedFlashLPV4_v2": {
+      "address": "0xd1d6793c117e3b950c98d96b3d21fceb7f80934c",
+      "deployedAt": "2026-02-07T12:58:15.173Z",
+      "deployer": "0x43DDBD19381C8Ea8C1e4670d18DdB97c43fbEFDC",
+      "transactionHash": "0xd07634cdec8f61c248e5c369c7e26ac9def2daaaba194cfe59da61264d71d3e0",
+      "blockNumber": 37350403,
+      "features": [
+        "redeemPool",
+        "v4Integration",
+        "yellowChannel"
+      ]
+    },
+    "UnifiedFlashLPV4_v1_LOCKED": {
+      "address": "0xd2cc5a92f47f7b5cB726f58eCc4073c3F5dc00C5",
+      "note": "Original contract - tokens are locked (no redeemPool function)"
+    }
+  }
+}

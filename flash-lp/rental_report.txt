@@ -1,0 +1,44 @@
+
+🔍 Checking Rental Status
+=======================
+Contract: 0xd1d6793c117e3b950c98d96b3d21fceb7f80934c
+Renter:   0x43DDBD19381C8Ea8C1e4670d18DdB97c43fbEFDC
+
+Fetching all rentals for this account...
+Found 5 rentals. Showing latest 5:
+
+Rental #5
+  Status:      🟢 ACTIVE
+  Pool ID:     1
+  Start Time:  8/2/2026, 12:23:02 am
+  End Time:    8/2/2026, 1:23:02 am (3236s left)
+  Channel ID:  0xb61aeac0cb3a0ca07b52cb018f6df3c29dd2b6e6b26a25d936fe2422de68cc5d
+---------------------------------
+Rental #4
+  Status:      🟢 ACTIVE
+  Pool ID:     1
+  Start Time:  8/2/2026, 12:08:10 am
+  End Time:    8/2/2026, 1:08:10 am (2344s left)
+  Channel ID:  0xeece1c95af6b3f87569dd495e2ceef6dfdd88aaca631b5a5d5b9bcf86dc6f462
+---------------------------------
+Rental #3
+  Status:      🟢 ACTIVE
+  Pool ID:     1
+  Start Time:  8/2/2026, 12:04:56 am
+  End Time:    8/2/2026, 1:04:56 am (2150s left)
+  Channel ID:  0xd39704dad1cf659b91c5780d065557e74e95cfb28648c79df20051574f8e4222
+---------------------------------
+Rental #2
+  Status:      🟢 ACTIVE
+  Pool ID:     1
+  Start Time:  8/2/2026, 12:03:46 am
+  End Time:    8/2/2026, 1:03:46 am (2079s left)
+  Channel ID:  0x485300ac664f42cc454528c31171c35c1dd56560671890da8ba0809286856c28
+---------------------------------
+Rental #1
+  Status:      🟢 ACTIVE
+  Pool ID:     1
+  Start Time:  8/2/2026, 12:03:18 am
+  End Time:    8/2/2026, 1:03:18 am (2051s left)
+  Channel ID:  0x4fdd27048eb4fbe564892b939cac71687501e75f1323f62d13abdaa95f04a85a
+---------------------------------

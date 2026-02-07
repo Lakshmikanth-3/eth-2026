@@ -1,0 +1,9 @@
+{
+  "network": "baseSepolia",
+  "chainId": 84532,
+  "deployer": "0x43DDBD19381C8Ea8C1e4670d18DdB97c43fbEFDC",
+  "timestamp": "2026-02-06T07:00:12.145Z",
+  "contracts": {
+    "FlashLP": "0x8BC377c95BcF6B14c270dbA2597c3034adeb4815"
+  }
+}

@@ -1,0 +1,8 @@
+SWAP REPORT
+===========
+Rental ID:     5
+Swap Amount:   1 USDC
+Initial Fees:  0.006 USDC
+Final Fees:    0.006 USDC
+Fee Collected: 0 USDC
+Status: NO FEE ACCRUED
