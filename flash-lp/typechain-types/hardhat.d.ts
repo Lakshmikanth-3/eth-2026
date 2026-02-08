@@ -62,6 +62,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ECDSA__factory>;
     getContractFactory(
+      name: "MerkleProof",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MerkleProof__factory>;
+    getContractFactory(
       name: "ERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC165__factory>;
@@ -166,6 +170,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockERC20__factory>;
     getContractFactory(
+      name: "IZKVerifier",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IZKVerifier__factory>;
+    getContractFactory(
+      name: "PredictiveCommitment",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PredictiveCommitment__factory>;
+    getContractFactory(
       name: "RentalManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.RentalManager__factory>;
@@ -173,6 +185,14 @@ declare module "hardhat/types/runtime" {
       name: "RentalVault",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.RentalVault__factory>;
+    getContractFactory(
+      name: "TemporalAMM",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TemporalAMM__factory>;
+    getContractFactory(
+      name: "TLVMCore",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TLVMCore__factory>;
     getContractFactory(
       name: "UnifiedFlashLP",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -189,6 +209,10 @@ declare module "hardhat/types/runtime" {
       name: "V4TestRouter",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.V4TestRouter__factory>;
+    getContractFactory(
+      name: "VirtualLiquidityManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VirtualLiquidityManager__factory>;
     getContractFactory(
       name: "YellowChannelManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -255,6 +279,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ECDSA>;
     getContractAt(
+      name: "MerkleProof",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MerkleProof>;
+    getContractAt(
       name: "ERC165",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -385,6 +414,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.MockERC20>;
     getContractAt(
+      name: "IZKVerifier",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IZKVerifier>;
+    getContractAt(
+      name: "PredictiveCommitment",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PredictiveCommitment>;
+    getContractAt(
       name: "RentalManager",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -394,6 +433,16 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.RentalVault>;
+    getContractAt(
+      name: "TemporalAMM",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TemporalAMM>;
+    getContractAt(
+      name: "TLVMCore",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TLVMCore>;
     getContractAt(
       name: "UnifiedFlashLP",
       address: string | ethers.Addressable,
@@ -414,6 +463,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.V4TestRouter>;
+    getContractAt(
+      name: "VirtualLiquidityManager",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VirtualLiquidityManager>;
     getContractAt(
       name: "YellowChannelManager",
       address: string | ethers.Addressable,
@@ -469,6 +523,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ECDSA>;
     deployContract(
+      name: "MerkleProof",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MerkleProof>;
+    deployContract(
       name: "ERC165",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ERC165>;
@@ -573,6 +631,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
     deployContract(
+      name: "IZKVerifier",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IZKVerifier>;
+    deployContract(
+      name: "PredictiveCommitment",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PredictiveCommitment>;
+    deployContract(
       name: "RentalManager",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.RentalManager>;
@@ -580,6 +646,14 @@ declare module "hardhat/types/runtime" {
       name: "RentalVault",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.RentalVault>;
+    deployContract(
+      name: "TemporalAMM",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TemporalAMM>;
+    deployContract(
+      name: "TLVMCore",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TLVMCore>;
     deployContract(
       name: "UnifiedFlashLP",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -596,6 +670,10 @@ declare module "hardhat/types/runtime" {
       name: "V4TestRouter",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.V4TestRouter>;
+    deployContract(
+      name: "VirtualLiquidityManager",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VirtualLiquidityManager>;
     deployContract(
       name: "YellowChannelManager",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -662,6 +740,11 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ECDSA>;
     deployContract(
+      name: "MerkleProof",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MerkleProof>;
+    deployContract(
       name: "ERC165",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -792,6 +875,16 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
     deployContract(
+      name: "IZKVerifier",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IZKVerifier>;
+    deployContract(
+      name: "PredictiveCommitment",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PredictiveCommitment>;
+    deployContract(
       name: "RentalManager",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -801,6 +894,16 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.RentalVault>;
+    deployContract(
+      name: "TemporalAMM",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TemporalAMM>;
+    deployContract(
+      name: "TLVMCore",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TLVMCore>;
     deployContract(
       name: "UnifiedFlashLP",
       args: any[],
@@ -821,6 +924,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.V4TestRouter>;
+    deployContract(
+      name: "VirtualLiquidityManager",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VirtualLiquidityManager>;
     deployContract(
       name: "YellowChannelManager",
       args: any[],

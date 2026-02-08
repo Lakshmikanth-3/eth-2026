@@ -1,132 +1,133 @@
 'use client'
 
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import { X, ArrowsLeftRight } from '@phosphor-icons/react'
+import { useState, useEffect } from 'react'
+import { Position } from '@/types'
+import Modal from '@/components/ui/Modal'
+import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
+import { ArrowDown, ArrowsLeftRight, Wallet } from '@phosphor-icons/react'
 import { useFlashLPSwap } from '@/hooks/useFlashLPSwap'
-import { Rental } from '@/types'
-import { formatUnits } from 'viem'
+import { formatCurrency } from '@/lib/formatting'
+import toast from 'react-hot-toast'
+import { CONTRACT_ADDRESSES } from '@/lib/contracts'
 
 interface SwapModalProps {
     isOpen: boolean
     onClose: () => void
-    rental: Rental & {
-        token0Address?: string
-        token1Address?: string
-        token0Symbol?: string
-        token1Symbol?: string
-    }
+    rentalId: string
+    position: Position
 }
 
-export default function SwapModal({ isOpen, onClose, rental }: SwapModalProps) {
-    const [amount, setAmount] = useState('')
-    const [direction, setDirection] = useState<'0to1' | '1to0'>('0to1')
+export default function SwapModal({ isOpen, onClose, rentalId, position }: SwapModalProps) {
+    const [amountIn, setAmountIn] = useState('')
+    const [isZeroToOne, setIsZeroToOne] = useState(true)
+    const { swap, isPending, isConfirming, isConfirmed, error } = useFlashLPSwap()
 
-    // Parse pool name "USDC/ETH" to get symbols if not provided
-    const symbols = rental.poolName.split('/')
-    const token0Symbol = rental.token0Symbol || symbols[0] || 'Token0'
-    const token1Symbol = rental.token1Symbol || symbols[1] || 'Token1'
-
-    const { swap, isPending, isConfirming } = useFlashLPSwap()
-
-    // Mock decimals (18) for simulation if not known
-    const decimals = 18
+    const tokenIn = isZeroToOne ? position.token0 : position.token1
+    const tokenOut = isZeroToOne ? position.token1 : position.token0
+    const tokenInSymbol = isZeroToOne ? "USDC" : "WETH" // Using symbols for demo, should map from address
+    const tokenOutSymbol = isZeroToOne ? "WETH" : "USDC"
 
     const handleSwap = () => {
-        if (!amount || parseFloat(amount) <= 0) return
+        if (!amountIn || parseFloat(amountIn) <= 0) return
 
-        // For simulation, we need actual token addresses. 
-        // If they are missing from Rental object (due to API limitation), we might fail.
-        // We will assume the parent component allows providing them or we use placeholders if mock.
-        if (!rental.token0Address || !rental.token1Address) {
-            console.error("Missing token addresses for swap")
-            // Fallback for mock/demo if addresses are missing?
-            // Real contract needs real addresses matching the pool.
+        // Get contract address for current chain
+        const chainId = position.chain === 'arbitrum' ? 421614 : 84532
+        const contractAddress = CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]?.FlashLP
+
+        if (!contractAddress) {
+            toast.error("Contract not found for this chain")
             return
         }
 
-        const tokenIn = direction === '0to1' ? rental.token0Address : rental.token1Address
-
-        // Use chainId 421614 (Arbitrum Sepolia) or 84532 (Base Sepolia) based on rental.chain
-        const chainId = rental.chain === 'base' ? 84532 : 421614
-
-        swap(rental.id, tokenIn, amount, decimals, chainId)
-        // Note: onClose should ideally happen after success, handled by parent or effect
+        swap(
+            rentalId,
+            tokenIn,
+            amountIn,
+            isZeroToOne ? 6 : 18, // Decimals: USDC (6), WETH (18) - simplified
+            contractAddress
+        )
     }
 
+    useEffect(() => {
+        if (isConfirming) toast.loading('Swapping...', { id: 'swap-tx' })
+        if (isConfirmed) {
+            toast.success('Swap successful!', { id: 'swap-tx' })
+            onClose()
+            setAmountIn('')
+        }
+        if (error) toast.error(`Swap failed: ${error.message}`, { id: 'swap-tx' })
+    }, [isPending, isConfirming, isConfirmed, error])
+
     return (
-        <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" aria-hidden="true" />
-
-            <div className="fixed inset-0 flex items-center justify-center p-4">
-                <Dialog.Panel className="mx-auto max-w-sm w-full bg-surface border border-border rounded-2xl p-6 shadow-xl">
-                    <div className="flex justify-between items-center mb-6">
-                        <Dialog.Title className="text-xl font-bold">Generate Volume</Dialog.Title>
-                        <button onClick={onClose} className="text-text-secondary hover:text-white transition-colors">
-                            <X size={24} />
-                        </button>
+        <Modal isOpen={isOpen} onClose={onClose} title="Swap Tokens">
+            <div className="space-y-4">
+                {/* From Token */}
+                <div className="bg-surface-hover p-4 rounded-xl border border-border">
+                    <div className="flex justify-between mb-2">
+                        <label className="text-sm text-text-secondary font-medium">Pay</label>
+                        <span className="text-sm text-text-tertiary flex items-center gap-1">
+                            <Wallet size={14} /> Balance: --
+                        </span>
                     </div>
-
-                    <div className="mb-6">
-                        <p className="text-sm text-text-secondary mb-4">
-                            Simulate a swap to generate fees for your rental.
-                        </p>
-
-                        <div className="space-y-4">
-                            <div className="bg-surface-hover rounded-xl p-4 border border-gray-700">
-                                <label className="text-xs text-text-secondary mb-1 block">From</label>
-                                <div className="flex justify-between items-center">
-                                    <input
-                                        type="number"
-                                        value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
-                                        placeholder="0.0"
-                                        className="bg-transparent text-2xl font-bold outline-none w-full mr-2"
-                                    />
-                                    <span className="bg-primary/20 text-primary px-3 py-1 rounded-lg text-sm font-bold">
-                                        {direction === '0to1' ? token0Symbol : token1Symbol}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-center">
-                                <button
-                                    onClick={() => setDirection(d => d === '0to1' ? '1to0' : '0to1')}
-                                    className="bg-surface border border-border p-2 rounded-full hover:bg-surface-hover transition-colors"
-                                >
-                                    <ArrowsLeftRight size={20} className="text-text-secondary" />
-                                </button>
-                            </div>
-
-                            <div className="bg-surface-hover rounded-xl p-4 border border-gray-700 opacity-75">
-                                <label className="text-xs text-text-secondary mb-1 block">To (Estimated)</label>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-2xl font-bold text-gray-400">
-                                        {amount || '0.0'}
-                                    </span>
-                                    <span className="bg-gray-700/50 text-gray-400 px-3 py-1 rounded-lg text-sm font-bold">
-                                        {direction === '0to1' ? token1Symbol : token0Symbol}
-                                    </span>
-                                </div>
-                            </div>
+                    <div className="flex items-center gap-3">
+                        <Input
+                            type="number"
+                            placeholder="0.0"
+                            value={amountIn}
+                            onChange={(e) => setAmountIn(e.target.value)}
+                            className="text-2xl font-bold bg-transparent border-none p-0 focus:ring-0 w-full"
+                        />
+                        <div className="bg-surface px-3 py-1 rounded-lg font-bold shadow-sm border border-border">
+                            {tokenInSymbol}
                         </div>
                     </div>
+                </div>
 
-                    <div className="flex gap-3">
-                        <Button variant="secondary" onClick={onClose} className="flex-1">
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleSwap}
-                            disabled={!amount || parseFloat(amount) <= 0 || isPending || isConfirming}
-                            className="flex-1"
-                        >
-                            {isPending || isConfirming ? 'Swapping...' : 'Execute Swap'}
-                        </Button>
+                {/* Switcher */}
+                <div className="flex justify-center -my-2 relative z-10">
+                    <button
+                        onClick={() => setIsZeroToOne(!isZeroToOne)}
+                        className="bg-surface border border-border p-2 rounded-full shadow-md hover:bg-surface-hover transition-colors"
+                    >
+                        <ArrowDown size={20} className="text-primary" />
+                    </button>
+                </div>
+
+                {/* To Token */}
+                <div className="bg-surface-hover p-4 rounded-xl border border-border">
+                    <div className="flex justify-between mb-2">
+                        <label className="text-sm text-text-secondary font-medium">Receive (Estimated)</label>
                     </div>
-                </Dialog.Panel>
+                    <div className="flex items-center gap-3">
+                        <div className="text-2xl font-bold text-text-secondary w-full">
+                            {amountIn ? (parseFloat(amountIn) * (isZeroToOne ? 0.0003 : 3000)).toFixed(4) : "0.0"}
+                        </div>
+                        <div className="bg-surface px-3 py-1 rounded-lg font-bold shadow-sm border border-border">
+                            {tokenOutSymbol}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Info */}
+                <div className="bg-primary/5 text-primary text-xs p-3 rounded-lg flex items-start gap-2">
+                    <ArrowsLeftRight size={16} className="mt-0.5 shrink-0" />
+                    <p>
+                        Swapping directly against your rented liquidity pool.
+                        Fees (0.3%) are <strong>earned by you</strong> and added to your position.
+                    </p>
+                </div>
+
+                {/* Action */}
+                <Button
+                    className="w-full py-4 text-lg font-bold"
+                    onClick={handleSwap}
+                    isLoading={isPending || isConfirming}
+                    disabled={!amountIn || isPending || isConfirming}
+                >
+                    {isPending ? 'Confirm in Wallet...' : isConfirming ? 'Swapping...' : 'Swap Now'}
+                </Button>
             </div>
-        </Dialog>
+        </Modal>
     )
 }

@@ -9,9 +9,10 @@ interface ModalProps {
     onClose: () => void
     children: ReactNode
     title?: string
+    maxWidth?: string
 }
 
-export default function Modal({ isOpen, onClose, children, title }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, title, maxWidth = 'max-w-md' }: ModalProps) {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden'
@@ -42,7 +43,7 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-surface border border-border rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+                            className={`bg-surface border border-border rounded-2xl shadow-2xl ${maxWidth} w-full max-h-[90vh] overflow-y-auto`}
                         >
                             {/* Header */}
                             {title && (

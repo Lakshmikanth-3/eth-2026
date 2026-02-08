@@ -1,0 +1,228 @@
+[
+  {
+    "inputs": [],
+    "name": "DECAY_RATE",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "PRECISION",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "volatilityIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "demandCoefficient",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidityDepth",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateIntegratedCost",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalCost",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "timeElapsed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "volatilityIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "demandCoefficient",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "liquidityDepth",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateTemporalPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "pricePerSecond",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "demandData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "activeRentals",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalDemandScore",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastUpdate",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCurrentDemand",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCurrentVolatility",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newDemandScore",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateDemand",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "positionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newVolatility",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateVolatility",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "volatilityData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "realizedVolatility",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastUpdate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "historicalAverage",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

@@ -1,6 +1,7 @@
 import { useWriteContract, useWaitForTransactionReceipt, useChainId, useAccount, useSwitchChain } from 'wagmi'
 import { CONTRACT_ADDRESSES, ABIS, DEPLOYED_CHAINS } from '@/lib/contracts'
 import { parseUnits } from 'viem'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 
 export function useFlashLPSwap() {
@@ -17,54 +18,36 @@ export function useFlashLPSwap() {
         rentalId: string,
         tokenIn: string,
         amountIn: string,
-        decimals: number,
-        chainId: number
+        tokenInDecimals: number,
+        contractAddress: string
     ) => {
         if (!address) {
             toast.error('Please connect your wallet')
             return
         }
 
-        if (!DEPLOYED_CHAINS.includes(chainId as typeof DEPLOYED_CHAINS[number])) {
-            toast.error('FlashLP not deployed on this chain')
-            return
-        }
+        // Parse amount
+        const amount = parseUnits(amountIn, tokenInDecimals)
 
-        if (currentChainId !== chainId) {
-            try {
-                toast.loading('Switching network...')
-                await switchChainAsync({ chainId })
-                toast.dismiss()
-            } catch (error) {
-                console.error('Failed to switch chain:', error)
-                toast.error('Failed to switch network')
-                return
-            }
-        }
-
-        const contractAddress = CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]?.FlashLP
-        if (!contractAddress) {
-            toast.error('FlashLP not deployed on this network')
-            return
-        }
+        // TODO: Handle Approvals here (omitted for brevity in this step, assume approved)
+        // In a real app, we'd check allowance and trigger approve first.
 
         try {
-            const parsedAmount = parseUnits(amountIn, decimals)
-
+            console.log("Swapping on contract:", contractAddress)
             writeContract({
                 address: contractAddress as `0x${string}`,
-                abi: ABIS.FlashLP,
+                abi: ABIS.FlashLP, // Using Legacy FlashLP ABI for swap for now
                 functionName: 'executeSwap',
                 args: [
                     BigInt(rentalId),
                     tokenIn as `0x${string}`,
-                    parsedAmount,
-                    0n // Min output 0 for demo/simulation
+                    amount,
+                    0n // MinAmountOut (slippage protection - set to 0 for demo)
                 ],
             })
         } catch (error) {
             console.error('Swap failed:', error)
-            toast.error('Failed to execute swap')
+            toast.error('Failed to initiate swap')
         }
     }
 

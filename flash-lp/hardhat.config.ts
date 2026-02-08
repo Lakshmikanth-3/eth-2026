@@ -1,5 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+// import "@nomicfoundation/hardhat-toolbox";
+import "@nomicfoundation/hardhat-ethers";
 import "dotenv/config";
 
 const config: HardhatUserConfig = {
@@ -44,6 +45,8 @@ const config: HardhatUserConfig = {
       url: process.env.BASE_SEPOLIA_RPC || "",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 84532,
+      gasPrice: undefined,
+      gasMultiplier: 1.1,
     },
   },
 };

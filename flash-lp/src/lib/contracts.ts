@@ -19,7 +19,11 @@ export const CONTRACT_ADDRESSES = {
     },
     // Arbitrum Sepolia
     421614: {
-        FlashLP: "0x2b47973bbecb0d2bd635bd5f0f8e5138bc4d54b0", // Deployed & Verified with Channel support
+        FlashLP: "0x2b47973bbecb0d2bd635bd5f0f8e5138bc4d54b0", // Legacy
+        TLVMCore: "0x12D111dd6FC39d4C4f5311D9024a777Fa6a5dA36", // NEW: TLVM Orchestrator
+        TemporalAMM: "0x8b4B47A3a8d10900B9da237f988bb6843AC03949",
+        PredictiveCommitment: "0x15daad4829700543EcBd4Ed3fe723a5b7Bc2b9cC",
+        VirtualLiquidityManager: "0x87d8cF25a4b12729578330d9eA5Adf004c84B9C2",
         V4Router: "0x87bD55Ea0505005799a28D34B5Ca17f4c8d24301",
         PoolManager: "0x4e650C85801e9dC44313669b491d20DB864a5451",
         USDC: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
@@ -31,9 +35,13 @@ export const CONTRACT_ADDRESSES = {
     },
     // Base Sepolia
     84532: {
-        FlashLP: "0x4ffeb090ba98760deb7815f40e0d29b9a07fa819", // Deployed & Verified with Channel support
-        FlashLPV4: "0xd1d6793c117e3b950c98d96b3d21fceb7f80934c", // NEW: V4-integrated version with redeemPool
-        V4Router: "0x8C85937cB4EFe36F6Df3dc4632B0b010afB440A0", // LiquidityManager with Redeem
+        FlashLP: "0x4ffeb090ba98760deb7815f40e0d29b9a07fa819", // Legacy
+        FlashLPV4: "0xd1d6793c117e3b950c98d96b3d21fceb7f80934c", // Legacy V4
+        TLVMCore: "0x17794D62FEc98Bb355Ec706bb3769697dF8Fb50f", // NEW: TLVM Orchestrator
+        TemporalAMM: "0x6422A18D1d79499821704086c1769313FD478228",
+        PredictiveCommitment: "0x13214F9f81f3d92ab95ecA3Eb540C8C08dE29EaF",
+        VirtualLiquidityManager: "0xA95A419191BA59a610E65778C5b70042788fc1B3",
+        V4Router: "0x8C85937cB4EFe36F6Df3dc4632B0b010afB440A0",
         PoolManager: "0x1b832D5395A41446b508632466cf32c6C07D63c7",
         USDC: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
         WETH: "0x4200000000000000000000000000000000000006",

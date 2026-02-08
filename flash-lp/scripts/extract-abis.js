@@ -8,7 +8,11 @@ const OUT_DIR = path.join(__dirname, '../src/lib/abis');
 const CONTRACTS = [
     { name: 'YellowChannelManager', dir: 'YellowChannelManager.sol' },
     { name: 'RentalManager', dir: 'RentalManager.sol' },
-    { name: 'RentalVault', dir: 'RentalVault.sol' }
+    { name: 'RentalVault', dir: 'RentalVault.sol' },
+    { name: 'TemporalAMM', dir: 'TemporalAMM.sol' },
+    { name: 'PredictiveCommitment', dir: 'PredictiveCommitment.sol' },
+    { name: 'VirtualLiquidityManager', dir: 'VirtualLiquidityManager.sol' },
+    { name: 'TLVMCore', dir: 'TLVMCore.sol' }
 ];
 
 function main() {
